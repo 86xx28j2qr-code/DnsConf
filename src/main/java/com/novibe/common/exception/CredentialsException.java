@@ -3,5 +3,5 @@ package com.novibe.common.exception;
 import lombok.experimental.StandardException;
 
 @StandardException
-public class CredentialsException extends RuntimeException {
+public class CredentialsException extends ProfileSetupException {
 }
