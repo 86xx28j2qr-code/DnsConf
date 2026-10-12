@@ -14,7 +14,7 @@ import static java.util.Optional.ofNullable;
 
 public abstract class AbstractNextDnsHttpClient extends ApiRequestSender {
 
-    private static final int RETRY_ATTEMPTS = 10;
+    private static final int RETRY_ATTEMPTS = 3;
 
     // NextDNS api rate limiter resets 60 seconds after the last request
     private static final Duration RETRY_DELAY = Duration.ofSeconds(60);
