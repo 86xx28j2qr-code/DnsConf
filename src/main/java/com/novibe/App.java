@@ -3,10 +3,11 @@ package com.novibe;
 
 import com.novibe.common.DnsTaskRunner;
 import com.novibe.common.base_structures.DnsProfile;
-import com.novibe.common.exception.CredentialsException;
+import com.novibe.common.exception.ProfileSetupException;
 import com.novibe.common.exception.UserInputException;
 import com.novibe.common.util.EnvParser;
 import com.novibe.common.util.Log;
+import com.novibe.common.util.ProfileFailures;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -20,6 +21,7 @@ public class App {
     static void main() {
         final List<DnsProfile> dnsProfiles = EnvParser.parseProfiles();
         final AnnotationConfigApplicationContext commonContext = loadCommonApplicationContext();
+        final ProfileFailures profileFailures = new ProfileFailures();
 
         for (DnsProfile dnsProfile : dnsProfiles) {
             AnnotationConfigApplicationContext currentContext = null;
@@ -29,9 +31,10 @@ public class App {
                 DnsTaskRunner runner = currentContext.getBean(DnsTaskRunner.class);
                 runner.run();
 
-            } catch (CredentialsException credentialsException) {
-                Log.fail("CredentialsException on profile " + dnsProfile.number());
-                Log.fail(credentialsException.getMessage());
+            } catch (ProfileSetupException profileSetupException) {
+                Log.fail("%s on profile %s".formatted(profileSetupException.getClass().getSimpleName(), dnsProfile.number()));
+                Log.fail(profileSetupException.getMessage());
+                profileFailures.add(dnsProfile, profileSetupException);
             } catch (Exception exception) {
                 Log.fail("Unexpected exception on profile " + dnsProfile.number());
                 throw exception;
@@ -40,6 +43,10 @@ public class App {
             }
         }
         commonContext.close();
+
+        if (!profileFailures.isEmpty()) {
+            throw UserInputException.noStackTrace(profileFailures.summary(dnsProfiles.size()));
+        }
     }
 
     private static AnnotationConfigApplicationContext loadCommonApplicationContext() {
