@@ -9,7 +9,9 @@ import com.novibe.dns.cloudflare.http.dto.response.rule.SingleRuleApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.StructuredTaskScope;
@@ -76,7 +78,8 @@ public class RuleService {
     }
 
     public List<GatewayRuleDto> obtainExistingRules() {
-        return cloudflareRuleClient.getRules().getResult();
+        List<GatewayRuleDto> rules = cloudflareRuleClient.getRules().getResult();
+        return new ArrayList<>(Objects.requireNonNullElse(rules, List.of()));
     }
 
     public List<GatewayRuleDto> removeOldRules(List<GatewayRuleDto> rules) {
