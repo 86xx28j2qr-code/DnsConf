@@ -12,18 +12,18 @@ public class CloudflareRuleClient {
 
     private static final String path = "/rules";
 
-    private final RequestCloudflare requestCloudflare;
+    private final AbstractCloudflareApiClient abstractCloudflareApiClient;
 
     public SingleRuleApiResponse createBlockingRule(CreateRuleRequest rule) {
-        return requestCloudflare.post(path, rule, SingleRuleApiResponse.class);
+        return abstractCloudflareApiClient.post(path, rule, SingleRuleApiResponse.class);
     }
 
     public SingleRuleApiResponse removeRuleById(String id) {
-        return requestCloudflare.delete(path + "/" + id, SingleRuleApiResponse.class);
+        return abstractCloudflareApiClient.delete(path + "/" + id, SingleRuleApiResponse.class);
     }
 
     public MultiRuleApiResponse getRules() {
-        return requestCloudflare.get(path, MultiRuleApiResponse.class);
+        return abstractCloudflareApiClient.get(path, MultiRuleApiResponse.class);
     }
 
 }

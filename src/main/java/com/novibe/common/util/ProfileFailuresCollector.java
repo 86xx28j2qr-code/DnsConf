@@ -6,7 +6,7 @@ import com.novibe.common.exception.ProfileSetupException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileFailures {
+public class ProfileFailuresCollector {
 
     private final List<String> failures = new ArrayList<>();
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NextDnsDenyClient extends AbstractNextDnsHttpClient {
+public class NextDnsDenyClient extends AbstractNextDnsApiClient {
 
     public List<DenyDto> fetchDenylist() {
         return get(path(), MultiDenyResponse.class)

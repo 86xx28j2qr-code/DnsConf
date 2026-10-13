@@ -257,16 +257,18 @@ Previously generated data is removed **ONLY** when both `BLOCK` and `REDIRECT` s
 ## Keep the action running
 
 GitHub disables scheduled workflows in a public repository
-[when there is no repository activity for 60 days](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
-A fork is a public repository, and runs of the action are not counted as activity, so the action stops on its own about
-two months after the setup.
+[if there has been no activity in it for 60 days](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+Your fork is a public repository. **A scheduled run is not counted as activity**. Therefore, approximately once every two months
+you need to run it manually.
 
-**How to check:** open the _Actions_ tab. A disabled workflow is marked with a notice that scheduled runs are turned off.
-The badge at the top of your fork readme also shows the result of the last run and its date.
+**How to check:** Click the badge below (the same one is at the top of the README) to go to the run history.<br>
+[![Last Build](../../actions/workflows/github_action.yml/badge.svg?branch=main)](../../actions/workflows/github_action.yml)<br>
+A disabled workflow will have a notice that scheduled runs are turned off. In the run history (workflow runs), you can see the date of the last run.
 
-**How to turn it on again:** _Actions_ tab => workflow **DNS Block&Redirect Configurer cron task** => **Enable
-workflow**. Going through the configurator https://dns-conf-ui.vercel.app again enables the workflow as well.
+**How to turn it on again:**
+Click the badge above and press the Run Workflow button<br>
+_Or_: _Actions_ tab → workflow **DNS Block&Redirect Configurer cron task** → **Enable workflow** button.<br>
+Reconfiguring via the configurator https://dns-conf-ui.vercel.app also enables the workflow.
 
-Keep in mind that redirect IPs change over time, so a fork that has been disabled for a long time holds outdated rules
-until the next successful run.
-
+Keep in mind that proxy IPs change over time, so in a fork that has been disabled for a long time, the rules remain
+outdated until the first successful run.

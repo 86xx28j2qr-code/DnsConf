@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class RequestCloudflareTest {
+class AbstractCloudflareApiClientTest {
 
     private static final int RETRY_ATTEMPTS = 3;
 
@@ -44,7 +44,7 @@ class RequestCloudflareTest {
 
     @Spy
     @InjectMocks
-    private RequestCloudflare requestCloudflare;
+    private AbstractCloudflareApiClient abstractCloudflareApiClient;
 
     @Test
     void retriesRateLimitedRequestUntilItSucceeds() throws IOException, InterruptedException {
@@ -52,7 +52,7 @@ class RequestCloudflareTest {
         doReturn(response(429, "rate limited"), response(200, "{\"success\":true}"))
                 .when(httpClient).send(any(), any());
 
-        MultiListApiResponse response = requestCloudflare.get("/lists", MultiListApiResponse.class);
+        MultiListApiResponse response = abstractCloudflareApiClient.get("/lists", MultiListApiResponse.class);
 
         assertTrue(response.isSuccess());
         verify(httpClient, times(2)).send(any(), any());
@@ -64,7 +64,7 @@ class RequestCloudflareTest {
         doReturn(response(503, "unavailable"), response(200, "{\"success\":true}"))
                 .when(httpClient).send(any(), any());
 
-        assertTrue(requestCloudflare.get("/lists", MultiListApiResponse.class).isSuccess());
+        assertTrue(abstractCloudflareApiClient.get("/lists", MultiListApiResponse.class).isSuccess());
         verify(httpClient, times(2)).send(any(), any());
     }
 
@@ -74,7 +74,7 @@ class RequestCloudflareTest {
         doReturn(response(429, "rate limited")).when(httpClient).send(any(), any());
 
         DnsHttpError error = assertThrows(DnsHttpError.class,
-                () -> requestCloudflare.get("/lists", MultiListApiResponse.class));
+                () -> abstractCloudflareApiClient.get("/lists", MultiListApiResponse.class));
 
         assertEquals(429, error.getCode());
         verify(httpClient, times(RETRY_ATTEMPTS)).send(any(), any());
@@ -84,13 +84,13 @@ class RequestCloudflareTest {
     void doesNotRetryOnNotFound() throws IOException, InterruptedException {
         doReturn(response(404, "not found")).when(httpClient).send(any(), any());
 
-        assertThrows(DnsHttpError.class, () -> requestCloudflare.get("/lists", MultiListApiResponse.class));
+        assertThrows(DnsHttpError.class, () -> abstractCloudflareApiClient.get("/lists", MultiListApiResponse.class));
 
         verify(httpClient, times(1)).send(any(), any());
     }
 
     private void withoutRetryDelay() {
-        doReturn(Duration.ZERO).when(requestCloudflare).retryDelay();
+        doReturn(Duration.ZERO).when(abstractCloudflareApiClient).retryDelay();
     }
 
     private HttpResponse<String> response(int statusCode, String body) {

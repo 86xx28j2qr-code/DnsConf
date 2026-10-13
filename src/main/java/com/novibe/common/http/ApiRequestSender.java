@@ -1,4 +1,4 @@
-package com.novibe.common;
+package com.novibe.common.http;
 
 import com.google.gson.Gson;
 import com.novibe.common.base_structures.DnsProfile;

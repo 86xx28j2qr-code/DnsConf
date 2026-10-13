@@ -8,25 +8,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ProfileFailuresTest {
+class ProfileFailuresCollectorTest {
 
     @Test
     void staysEmptyWhenEveryProfileIsFine() {
-        assertTrue(new ProfileFailures().isEmpty());
+        assertTrue(new ProfileFailuresCollector().isEmpty());
     }
 
     @Test
     void keepsProfileNumberAndProviderInSummary() {
-        ProfileFailures profileFailures = new ProfileFailures();
+        ProfileFailuresCollector profileFailuresCollector = new ProfileFailuresCollector();
 
-        profileFailures.add(profile(1, "NEXTDNS"), new CredentialsException("Invalid api key"));
-        profileFailures.add(profile(3, "CLOUDFLARE"), new CredentialsException("Invalid API Token!"));
+        profileFailuresCollector.add(profile(1, "NEXTDNS"), new CredentialsException("Invalid api key"));
+        profileFailuresCollector.add(profile(3, "CLOUDFLARE"), new CredentialsException("Invalid API Token!"));
 
-        assertFalse(profileFailures.isEmpty());
+        assertFalse(profileFailuresCollector.isEmpty());
         assertEquals("""
                 Failed to set up 2 of 3 profiles:
                 Profile 1 (NEXTDNS): Invalid api key
-                Profile 3 (CLOUDFLARE): Invalid API Token!""", profileFailures.summary(3));
+                Profile 3 (CLOUDFLARE): Invalid API Token!""", profileFailuresCollector.summary(3));
     }
 
     private DnsProfile profile(int number, String provider) {

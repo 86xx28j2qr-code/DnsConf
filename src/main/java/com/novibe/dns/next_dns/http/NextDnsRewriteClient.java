@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NextDnsRewriteClient extends AbstractNextDnsHttpClient {
+public class NextDnsRewriteClient extends AbstractNextDnsApiClient {
 
     public List<RewriteDto> fetchRewrites() {
         return get(path(), MultiRewriteResponse.class)
