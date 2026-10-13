@@ -1,6 +1,6 @@
 package com.novibe.common.data_sources;
 
-import com.novibe.common.HttpRequestSender;
+import com.novibe.common.http.HttpRequestSender;
 import com.novibe.common.base_structures.HostsLine;
 import com.novibe.common.exception.DnsHttpError;
 import com.novibe.common.exception.UserInputException;

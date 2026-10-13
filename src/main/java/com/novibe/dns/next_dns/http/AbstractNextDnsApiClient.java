@@ -1,6 +1,6 @@
 package com.novibe.dns.next_dns.http;
 
-import com.novibe.common.ApiRequestSender;
+import com.novibe.common.http.ApiRequestSender;
 import com.novibe.common.exception.CredentialsException;
 import com.novibe.common.exception.DnsHttpError;
 import com.novibe.common.util.Log;
@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 import static java.util.Optional.ofNullable;
 
-public abstract class AbstractNextDnsHttpClient extends ApiRequestSender {
+public abstract class AbstractNextDnsApiClient extends ApiRequestSender {
 
     private static final int RETRY_ATTEMPTS = 3;
 

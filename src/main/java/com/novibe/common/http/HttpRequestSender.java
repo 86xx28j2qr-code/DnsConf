@@ -1,4 +1,4 @@
-package com.novibe.common;
+package com.novibe.common.http;
 
 import com.novibe.common.exception.DnsHttpError;
 import com.novibe.common.util.Jsonable;

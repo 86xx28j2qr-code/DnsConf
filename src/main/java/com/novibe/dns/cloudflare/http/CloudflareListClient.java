@@ -19,19 +19,19 @@ public class CloudflareListClient {
 
     private static final String path = "/lists";
 
-    private final RequestCloudflare requestCloudflare;
+    private final AbstractCloudflareApiClient abstractCloudflareApiClient;
 
     public List<GatewayListDto> getLists() {
-        List<GatewayListDto> lists = requestCloudflare.get(path, MultiListApiResponse.class).getResult();
+        List<GatewayListDto> lists = abstractCloudflareApiClient.get(path, MultiListApiResponse.class).getResult();
         return Objects.requireNonNullElse(lists, List.of());
     }
 
     public SingleListApiResponse postList(CreateListRequest createListRequest) {
-        return requestCloudflare.post(path, createListRequest, SingleListApiResponse.class);
+        return abstractCloudflareApiClient.post(path, createListRequest, SingleListApiResponse.class);
     }
 
     public SingleListApiResponse deleteListById(UUID listId) {
-        return requestCloudflare.delete(path + "/" + listId, SingleListApiResponse.class);
+        return abstractCloudflareApiClient.delete(path + "/" + listId, SingleListApiResponse.class);
     }
 
 }
